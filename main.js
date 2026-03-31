@@ -50,3 +50,30 @@ const footer = document.querySelector("footer");
 const bodyFromFooter = footer.parentElement;
 console.log("Body from footer:", bodyFromFooter);
 
+h1.textContent = "New Title";
+
+article.textContent = "<script>alert('hack!')</script>";
+
+link.getAttribute("href"); // "#"
+link.href;                 // full URL
+
+link.setAttribute("href", "https://example.com");
+link.href = "https://example.com";
+
+link.hasAttribute("target");   // false
+link.removeAttribute("target");
+
+const element = document.querySelector("[data-id]");
+console.log(element.dataset.id);        // "123"
+console.log(element.dataset.category);  // "tech"
+element.dataset.newAttr = "value";      // adds data-new-attr
+
+container.style.backgroundColor = "#f0f0f0";
+container.style.padding = "30px";
+container.style.borderRadius = "8px";
+
+Object.assign(container.style, {
+    backgroundColor: "#333",
+    color: "white",
+    padding: "20px"
+});
