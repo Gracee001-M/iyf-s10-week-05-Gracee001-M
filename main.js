@@ -77,3 +77,25 @@ Object.assign(container.style, {
     color: "white",
     padding: "20px"
 });
+
+function addNavItem(text, href) {
+    // 1. Create the li element
+    const li = document.createElement("li");
+
+    // 2. Create the anchor element
+    const a = document.createElement("a");
+    a.textContent = text;          // Set link text
+    a.href = href;                 // Set link destination
+    a.className = "nav-link";      // Apply same class for styling
+
+    // 3. Append anchor to li
+    li.appendChild(a);
+
+    // 4. Append li to the nav list
+    const navList = document.querySelector(".nav-list");
+    navList.appendChild(li);
+}
+
+// Usage examples
+addNavItem("Blog", "/blog");
+addNavItem("Portfolio", "/portfolio");
