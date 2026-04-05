@@ -99,3 +99,46 @@ function addNavItem(text, href) {
 // Usage examples
 addNavItem("Blog", "/blog");
 addNavItem("Portfolio", "/portfolio");
+
+// Create display and buttons
+const counterDisplay = document.createElement("div");
+counterDisplay.textContent = "Count: 0";
+document.body.appendChild(counterDisplay);
+
+const incrementBtn = document.createElement("button");
+incrementBtn.textContent = "+";
+document.body.appendChild(incrementBtn);
+
+const decrementBtn = document.createElement("button");
+decrementBtn.textContent = "-";
+document.body.appendChild(decrementBtn);
+
+const resetBtn = document.createElement("button");
+resetBtn.textContent = "Reset";
+document.body.appendChild(resetBtn);
+
+// Counter state
+let count = 0;
+
+// Update function
+function updateDisplay() {
+    counterDisplay.textContent = `Count: ${count}`;
+}
+
+// Event listeners
+incrementBtn.addEventListener("click", () => {
+    count++;
+    updateDisplay();
+});
+
+decrementBtn.addEventListener("click", () => {
+    if (count > 0) {   // Prevent going below 0
+        count--;
+        updateDisplay();
+    }
+});
+
+resetBtn.addEventListener("click", () => {
+    count = 0;
+    updateDisplay();
+});
