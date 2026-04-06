@@ -224,3 +224,61 @@ form.addEventListener("submit", function(event) {
     event.preventDefault(); // Prevent page reload
     alert("Form submitted!");
 });
+
+// Create the task list container
+const taskList = document.createElement("ul");
+document.body.appendChild(taskList);
+
+// Add input + button for new tasks
+const input = document.createElement("input");
+input.type = "text";
+document.body.appendChild(input);
+
+const addButton = document.createElement("button");
+addButton.textContent = "Add Task";
+document.body.appendChild(addButton);
+
+// Event delegation: ONE listener on the parent <ul>
+taskList.addEventListener("click", function(event) {
+    // Toggle completed class when clicking on a task
+    if (event.target.tagName === "LI") {
+        event.target.classList.toggle("completed");
+    }
+
+    // Handle delete button
+    if (event.target.classList.contains("delete-btn")) {
+        event.target.parentElement.remove();
+    }
+});
+
+// Add new tasks
+addButton.addEventListener("click", () => {
+    const taskText = input.value.trim();
+    if (taskText !== "") {
+        const li = document.createElement("li");
+        li.textContent = taskText;
+
+        // Add delete button inside li
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Delete";
+        deleteBtn.classList.add("delete-btn");
+        li.appendChild(deleteBtn);
+
+        taskList.appendChild(li);
+        input.value = "";
+    }
+});
+
+// Optional: style completed tasks
+const style = document.createElement("style");
+style.textContent = `
+    .completed {
+        text-decoration: line-through;
+        color: gray;
+    }
+    .delete-btn {
+        margin-left: 10px;
+        color: red;
+    }
+`;
+document.head.appendChild(style);
