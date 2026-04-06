@@ -283,7 +283,7 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-const form = document.getElementById("contact-form");
+const formData = document.getElementById("contact-form");
 const nameInput = document.getElementById("name");
 const email = document.getElementById("email");
 
@@ -389,3 +389,158 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+// DOM Elements
+const form = document.getElementById("todo-form");
+const input = document.getElementById("todo-input");
+const todoList = document.getElementById("todo-list");
+const itemsLeft = document.getElementById("items-left");
+const filters = document.querySelectorAll(".filter");
+const clearCompletedBtn = document.getElementById("clear-completed");
+
+// State
+let todos = [];
+let currentFilter = "all";
+
+// Functions
+function createTodoElement(todo) {
+    const li = document.createElement("li");
+    li.dataset.id = todo.id;
+    li.className = todo.completed ? "completed" : "";
+
+    const span = document.createElement("span");
+    span.textContent = todo.text;
+    span.classList.add("task-text");
+
+    // Delete button
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "×";
+    deleteBtn.classList.add("delete-btn");
+
+    li.appendChild(span);
+    li.appendChild(deleteBtn);
+
+    return li;
+}
+
+function renderTodos() {
+    todoList.innerHTML = "";
+
+    let filteredTodos = todos;
+    if (currentFilter === "active") {
+        filteredTodos = todos.filter(todo => !todo.completed);
+    } else if (currentFilter === "completed") {
+        filteredTodos = todos.filter(todo => todo.completed);
+    }
+
+    filteredTodos.forEach(todo => {
+        const li = createTodoElement(todo);
+        todoList.appendChild(li);
+    });
+
+    updateStats();
+}
+
+function addTodo(text) {
+    const newTodo = {
+        id: Date.now(),
+        text,
+        completed: false
+    };
+    todos.push(newTodo);
+    renderTodos();
+}
+
+function toggleTodo(id) {
+    todos = todos.map(todo =>
+        todo.id == id ? { ...todo, completed: !todo.completed } : todo
+    );
+    renderTodos();
+}
+
+function deleteTodo(id) {
+    todos = todos.filter(todo => todo.id != id);
+    renderTodos();
+}
+
+function updateStats() {
+    const activeCount = todos.filter(todo => !todo.completed).length;
+    itemsLeft.textContent = `${activeCount} item${activeCount !== 1 ? "s" : ""} left`;
+}
+
+function filterTodos(filter) {
+    currentFilter = filter;
+    filters.forEach(btn => btn.classList.remove("active"));
+    document.querySelector(`[data-filter="${filter}"]`).classList.add("active");
+    renderTodos();
+}
+
+function clearCompleted() {
+    todos = todos.filter(todo => !todo.completed);
+    renderTodos();
+}
+
+// Event Listeners
+form.addEventListener("submit", function(event) {
+    event.preventDefault();
+    const text = input.value.trim();
+    if (text) {
+        addTodo(text);
+        input.value = "";
+    }
+});
+
+todoList.addEventListener("click", function(event) {
+    const li = event.target.closest("li");
+    if (!li) return;
+
+    const id = li.dataset.id;
+
+    if (event.target.classList.contains("delete-btn")) {
+        deleteTodo(id);
+    } else if (event.target.classList.contains("task-text")) {
+        toggleTodo(id);
+    }
+});
+
+// Bonus: Edit tasks on double-click
+todoList.addEventListener("dblclick", function(event) {
+    if (event.target.classList.contains("task-text")) {
+        const span = event.target;
+        const li = span.parentElement;
+        const id = li.dataset.id;
+
+        const inputEdit = document.createElement("input");
+        inputEdit.type = "text";
+        inputEdit.value = span.textContent;
+        inputEdit.classList.add("edit-input");
+
+        li.replaceChild(inputEdit, span);
+        inputEdit.focus();
+
+        inputEdit.addEventListener("keydown", function(e) {
+            if (e.key === "Enter") {
+                const newText = inputEdit.value.trim();
+                if (newText) {
+                    todos = todos.map(todo =>
+                        todo.id == id ? { ...todo, text: newText } : todo
+                    );
+                }
+                renderTodos();
+            } else if (e.key === "Escape") {
+                renderTodos();
+            }
+        });
+    }
+});
+
+filters.forEach(btn => {
+    btn.addEventListener("click", () => {
+        filterTodos(btn.dataset.filter);
+    });
+});
+
+clearCompletedBtn.addEventListener("click", clearCompleted);
+
+// Initialize
+renderTodos();
