@@ -180,3 +180,47 @@ resetButton.addEventListener("click", () => {
     count = 0;
     counterDisplay.textContent = `Count: ${count}`;
 });
+
+// Select the form and inputs
+const formnumber  = document.createElement("form");
+document.body.appendChild(form);
+
+const input1 = document.createElement("input");
+input1.type = "text";
+form.appendChild(input1);
+
+const input2 = document.createElement("input");
+input2.type = "text";
+form.appendChild(input2);
+
+const submitBtn = document.createElement("button");
+submitBtn.type = "submit";
+submitBtn.textContent = "Submit";
+form.appendChild(submitBtn);
+
+// Keyboard shortcuts
+document.addEventListener("keydown", function(event) {
+    // Ctrl + S → Show "Saved!" alert
+    if (event.ctrlKey && event.key === "s") {
+        event.preventDefault(); // Prevent browser save dialog
+        alert("Saved!");
+    }
+
+    // Escape → Clear all form inputs
+    if (event.key === "Escape") {
+        const inputs = form.querySelectorAll("input");
+        inputs.forEach(input => input.value = "");
+    }
+
+    // Ctrl + Enter → Submit form
+    if (event.ctrlKey && event.key === "Enter") {
+        event.preventDefault(); // Prevent default behavior
+        form.submit();          // Programmatically submit
+    }
+});
+
+// Handle form submission
+form.addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent page reload
+    alert("Form submitted!");
+});
