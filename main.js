@@ -142,3 +142,41 @@ resetBtn.addEventListener("click", () => {
     count = 0;
     updateDisplay();
 });
+
+// Create display
+const counterDisplay = document.createElement("div");
+counterDisplay.textContent = "Count: 0";
+document.body.appendChild(counterDisplay);
+
+let countnumber = 0;
+
+// Create buttons
+const plusButton = document.createElement("button");
+plusButton.textContent = "+";
+document.body.appendChild(plusButton);
+
+const minusButton = document.createElement("button");
+minusButton.textContent = "-";
+document.body.appendChild(minusButton);
+
+const resetButton = document.createElement("button");
+resetButton.textContent = "Reset";
+document.body.appendChild(resetButton);
+
+// Event listeners
+plusButton.addEventListener("click", () => {
+    count++;
+    counterDisplay.textContent = `Count: ${count}`;
+});
+
+minusButton.addEventListener("click", () => {
+    if (count > 0) {
+        count--;
+        counterDisplay.textContent = `Count: ${count}`;
+    }
+});
+
+resetButton.addEventListener("click", () => {
+    count = 0;
+    counterDisplay.textContent = `Count: ${count}`;
+});
